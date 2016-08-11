@@ -14,12 +14,24 @@ interface ProviderInterface
     /**
      * set score range
      *
-     * @param int $min Lowest Score
-     * @param int $max Highest Score
+     * @param float $min Lowest Score
+     * @param float $max Highest Score
      *
      * @return $this
      */
-    function setScoreRange(int $min, int $max);
+    function setScoreRange(float $min, float $max);
+
+    /**
+     * set identifiers of products to fetch scoring data for
+     * This should be an associative array [ productId => sku, … ]
+     *
+     * Attention: You should submit your whole catalog here, because score will be normalized
+     *
+     * @param array $productIdentifiers Identifiers of products [ productId => sku, … ]
+     *
+     * @return $this
+     */
+    function setProductIdentifiers(array $productIdentifiers);
 
     /**
      * fetch score information
