@@ -25,5 +25,5 @@ interface ConsumerInterface
      *
      * @return $this
      */
-    public function addItem(string $identifier, int $score);
+    public function addItem($identifier, $score);
 }

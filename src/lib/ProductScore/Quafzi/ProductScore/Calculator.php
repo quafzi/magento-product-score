@@ -31,7 +31,7 @@ class Calculator
      *
      * @return $this
      */
-    public function addProvider($provider, int $weight=1, array $config=[], $debug=false)
+    public function addProvider($provider, $weight=null, array $config=null)
     {
         if (is_string($provider)) {
             if (!preg_match('/^[A-Z][A-Za-z0-9]*(\\\\[A-Z][A-Za-z0-9]*)*$/', $provider)) {

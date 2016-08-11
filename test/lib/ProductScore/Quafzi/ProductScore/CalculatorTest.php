@@ -39,7 +39,7 @@ class CalculatorTest extends TestCase
         $calculator->addProvider('Foo\\Bar', 20, ['foo' => 'bar']);
 
         $provider = $this->getMockBuilder('Quafzi\\ProductScore\\Provider\\Another\\Provider')->getMock();
-        $calculator->addProvider('Another\\Provider', 4, ['a' => '1', 'b' => 2], true);
+        $calculator->addProvider('Another\\Provider', 4, ['a' => '1', 'b' => 2]);
 
         $providers = $calculator->getProviders();
         $this->assertEquals(2, count($providers), 'Expected both added providers to be registered.');

@@ -24,7 +24,7 @@ class FileConsumer implements ConsumerInterface
         }
     }
 
-    function addItem(string $identifier, int $score)
+    function addItem($identifier, $score)
     {
         fputcsv($this->fileHandle, [$identifier, $score]);
     }

@@ -19,7 +19,7 @@ interface ProviderInterface
      *
      * @return $this
      */
-    function setScoreRange(float $min, float $max);
+    function setScoreRange($min, $max);
 
     /**
      * set identifiers of products to fetch scoring data for
