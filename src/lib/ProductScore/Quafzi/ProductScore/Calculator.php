@@ -106,11 +106,13 @@ class Calculator
             $msg = 'You need to set an item consumer before running the calculator.';
             throw new MissingConsumerException($msg);
         }
+        $results = [];
         foreach ($this->getProviders() as $providerData) {
-            $providerData['instance']
+            $results[] = $providerData['instance']
                 ->setScoreRange($this->minScore, $this->maxScore)
                 ->setProductIdentifiers($this->productIdentifiers)
-                ->fetch($this->consumer, $providerData['config']);
+                ->fetch(clone $this->consumer, $providerData['config'])
+                ->getConsumer();
         }
     }
 }
