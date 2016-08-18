@@ -24,7 +24,7 @@ class CatalogPrice extends Provider
      */
     public function fetch(Consumer $consumer, array $config)
     {
-        $storeId = $config['store_id'] ?? 1;
+        $storeId = $config['store_id'] ?: 1;
         $collection = Mage::getModel('catalog/product')->getCollection()
             ->addStoreFilter($storeId)
             ->setVisibility(Mage::getSingleton('catalog/product_visibility')->getVisibleInSiteIds())
