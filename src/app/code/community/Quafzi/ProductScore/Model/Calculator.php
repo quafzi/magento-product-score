@@ -66,7 +66,9 @@ class Quafzi_ProductScore_Model_Calculator
                 }
             }
             foreach ($weights as $providerCode => $weight) {
-                $calculator->addProvider($providerCode, $weight, $providerConfig);
+                if (abs($weight) > 0) {
+                    $calculator->addProvider($providerCode, $weight, $providerConfig);
+                }
             }
         }
         return $calculator->setProductIdentifiers($this->getProductIdentifiers())
