@@ -113,9 +113,9 @@ class Calculator
         }, 0);
         $this->consumer->init(['prefix' => 'final']);
         foreach (array_keys($this->productIdentifiers) as $productId) {
+            $score = $this->minScore;
             foreach ($providerResults as $result) {
-                $score = $this->minScore;
-                $score += $result['consumer']->getItem($productId, 0) * $result['weight'] / $totalWeight;
+                $score += ($result['consumer']->getItem($productId, 0) * $result['weight'] / $totalWeight);
             }
             $this->consumer->addItem($productId, $score);
         }
