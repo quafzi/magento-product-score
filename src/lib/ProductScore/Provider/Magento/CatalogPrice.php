@@ -27,6 +27,7 @@ class CatalogPrice extends Provider
         $storeId = $config['store_id'] ?: 1;
         $collection = Mage::getModel('catalog/product')->getCollection()
             ->addStoreFilter($storeId)
+            ->addAttributeToSelect('price')
             ->setVisibility(Mage::getSingleton('catalog/product_visibility')->getVisibleInSiteIds())
             ->addAttributeToSort('price', \Mage_Catalog_Model_Resource_Product_Collection::SORT_ORDER_DESC) ;
         $results = [];
