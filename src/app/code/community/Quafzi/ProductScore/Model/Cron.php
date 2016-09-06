@@ -19,6 +19,7 @@ class Quafzi_ProductScore_Model_Cron
         try {
             Mage::helper('quafzi_productscore/product')
                 ->fetchCalculatedScores()
+                ->mapConsecutiveScores()
                 ->updateByManualScores();
         } catch (\Exception $e) {
             echo $e->getMessage();

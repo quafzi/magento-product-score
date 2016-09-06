@@ -27,7 +27,6 @@ class Quafzi_ProductScore_Helper_Product extends Mage_Core_Helper_Abstract
     public function fetchCalculatedScores()
     {
         $getItemScore = Mage::getModel('quafzi_productscore/calculator')->run();
-        $product = Mage::getModel('catalog/product');
         $productCollection = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('score_calculated')
             ->addAttributeToSelect('score_manual')
@@ -50,6 +49,22 @@ class Quafzi_ProductScore_Helper_Product extends Mage_Core_Helper_Abstract
                 $product->setScoreCalculated($item['score']);
                 $product->getResource()->saveAttribute($product, 'score_calculated');
             }
+        }
+        return $this;
+    }
+
+    public function mapConsecutiveScores()
+    {
+        $scoreIncrement = 0;
+        $productCollection = Mage::getModel('catalog/product')->getCollection()
+            ->addAttributeToSelect('score_calculated')
+            ->addAttributeToSelect('score_manual')
+            ->addAttributeToSelect('score')
+            ->setOrder('score_calculated', 'asc');
+        foreach ($this->_getCollectionItems($productCollection) as $product) {
+            ++$scoreIncrement;
+            $product->setScoreCalculated($scoreIncrement);
+            $product->getResource()->saveAttribute($product, 'score_calculated');
         }
         return $this;
     }
