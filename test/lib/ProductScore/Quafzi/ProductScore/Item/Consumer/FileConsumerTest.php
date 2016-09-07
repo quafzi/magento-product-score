@@ -36,12 +36,23 @@ class FileConsumerTest extends TestCase
     {
         $path = tempnam(sys_get_temp_dir(), __CLASS__ . '_' . __FUNCTION__ . '_');
         try {
+            $expectedScores = ['foo' => 3, 'bar' => 8, 'baz' => 5];
             $consumer = new FileConsumer();
             $consumer->init(['path' => $path]);
-            $consumer->addItem('foo', 3);
-            $this->assertEquals("foo,3\n", file_get_contents($path . '_score'));
+            $consumer->addItem('foo', $expectedScores['foo']);
+            $consumer->addItem('bar', $expectedScores['bar']);
+            $consumer->addItem('baz', $expectedScores['baz']);
+
+            $read = $consumer->getResultIterator();
+
+            $offset = 0;
+            foreach ($read() as $row) {
+                $this->assertEquals($expectedScores[$row['product']], $row['score']);
+                unset($expectedScores[$row['product']]);
+            }
+            $this->assertEmpty($expectedScores);
         } catch (\Exception $e) {
-            echo ' (File written: ' . $path . '_score)';
+            echo ' (File written: ' . $path . '*)';
             throw $e;
         } finally {
             @unlink($path);
@@ -63,7 +74,7 @@ class FileConsumerTest extends TestCase
             echo ' (File written: ' . $path . '*)';
             throw $e;
         } finally {
-            // @unlink($path);
+            @unlink($path);
         }
     }
 }

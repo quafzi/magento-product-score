@@ -61,6 +61,11 @@ class Calculator
         return $this->providers;
     }
 
+    /**
+     * Set product identifiers
+     *
+     * @param array $productIdentifiers Identifiers of products [ productId => sku, … ]
+     */
     public function setProductIdentifiers(array $productIdentifiers)
     {
         $this->productIdentifiers = $productIdentifiers;
@@ -100,6 +105,21 @@ class Calculator
         return $this->consumer;
     }
 
+    public function aggregateResults($providers)
+    {
+        $totalWeight = array_reduce($providers, function ($sum, $provider) {
+            return $sum + $result['weight'];
+        }, 0);
+        $this->consumer->init(['prefix' => 'final']);
+        foreach ($providers as $provider) {
+            $score = $this->minScore;
+            foreach (array_keys($this->productIdentifiers) as $productId) {
+                $score += $provider['consumer']->getItem($productId, 0) * $provider['weight'] / $totalWeight;
+            }
+            $this->consumer->addItem($product, $score);
+        }
+    }
+
     public function run()
     {
         if (empty($this->consumer)) {
@@ -108,11 +128,15 @@ class Calculator
         }
         $results = [];
         foreach ($this->getProviders() as $providerData) {
-            $results[] = $providerData['instance']
+            $consumer = clone $this->consumer;
+            $providerData['instance']
                 ->setScoreRange($this->minScore, $this->maxScore)
                 ->setProductIdentifiers($this->productIdentifiers)
-                ->fetch(clone $this->consumer, $providerData['config'])
-                ->getConsumer();
+                ->fetch($consumer, $providerData['config']);
+            $results[] = [
+                'consumer' => $consumer,
+                'weight' => $providerData['weight']
+            ];
         }
     }
 }

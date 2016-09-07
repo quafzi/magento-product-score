@@ -57,7 +57,6 @@ class CalculatorTest extends TestCase
         $this->expectException(InvalidConsumerException::class);
         $this->expectExceptionMessage('Invalid consumer name "Dev Null". Please specify consumer class name below namespace Quafzi\\ProductScore\\Item\\Consumer.');
         $calculator->setConsumer('Dev Null', ['foo' => 'bar']);
-        $this->assertNull($calculator->getConsumer());
     }
 
     public function testAddNonExistingConsumer()
@@ -66,7 +65,6 @@ class CalculatorTest extends TestCase
         $this->expectException(InvalidConsumerException::class);
         $this->expectExceptionMessage('Consumer "Dev\\Null" does not exist.');
         $calculator->setConsumer('Dev\\Null', ['foo' => 'bar']);
-        $this->assertNull($calculator->getConsumer());
     }
 
     public function testAddConsumer()
@@ -75,14 +73,11 @@ class CalculatorTest extends TestCase
 
         $this->getMockBuilder('Quafzi\\ProductScore\\Item\\Consumer\\Foo\\Bar')->getMock();
         $calculator->setConsumer('Foo\\Bar', ['foo' => 'bar']);
-
-        $this->assertInstanceOf('Quafzi\\ProductScore\\Item\\Consumer\\Foo\\Bar', $calculator->getConsumer());
     }
 
     public function testRunWithoutConsumer()
     {
         $calculator = new Calculator();
-        $this->assertNull($calculator->getConsumer());
         $this->expectException(MissingConsumerException::class);
         $this->expectExceptionMessage('You need to set an item consumer before running the calculator.');
         $calculator->run();
@@ -111,7 +106,7 @@ class CalculatorTest extends TestCase
         $calculator->setConsumer($consumer);
 
         $provider = $this->getMockBuilder('Quafzi\\ProductScore\\Provider\\ProviderInterface')
-            ->setMethods(['setScoreRange', 'setProductIdentifiers', 'fetch'])
+            ->setMethods(['setScoreRange', 'setProductIdentifiers', 'fetch', 'getResultIterator'])
             ->getMock();
         $provider->expects($this->once())
             ->method('setScoreRange')
@@ -123,7 +118,8 @@ class CalculatorTest extends TestCase
             ->will($this->returnSelf());
         $provider->expects($this->once())
             ->method('fetch')
-            ->with($this->equalTo($consumer), $this->equalTo(['foo' => 'bar']));
+            ->with($this->equalTo($consumer), $this->equalTo(['foo' => 'bar']))
+            ->will($this->returnSelf());
         $calculator->addProvider($provider, 20, ['foo' => 'bar']);
 
         $calculator->run();

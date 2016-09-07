@@ -93,6 +93,11 @@ class FileConsumer implements ConsumerInterface
         return $this->addItemData($identifier, 'score', $score);
     }
 
+    public function getItem($identifier, $default=null)
+    {
+        return $this->getItemData($identifier, 'score', $default);
+    }
+
     public function addItemData($identifier, $field, $value)
     {
         $this->checkFieldExists($field);
@@ -100,22 +105,30 @@ class FileConsumer implements ConsumerInterface
         fputcsv($file, [$identifier, $value]);
     }
 
-    protected function getRow($file)
+    protected function getFileIterator($field)
     {
-        while (($data = fgetcsv($file)) !== false) {
-            yield $data;
-        }
+        $file = $this->open($field, 'r');
+        return function () use ($file, $field) {
+            while (($data = fgetcsv($file)) !== false) {
+                yield ['product' => $data[0], $field => $data[1]];
+            }
+        };
     }
 
     public function getItemData($identifier, $field, $default=null)
     {
         $this->checkFieldExists($field);
-        $file = $this->open($field, 'r');
-        foreach ($this->getRow($file) as $row) {
-            if ($row[0] == $identifier) {
-                return $row[1];
+        $read = $this->getFileIterator($field);
+        foreach ($read() as $row) {
+            if ($row['product'] == $identifier) {
+                return $row[$field];
             }
         }
         return $default;
+    }
+
+    public function getResultIterator()
+    {
+        return $this->getFileIterator('score');
     }
 }

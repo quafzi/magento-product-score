@@ -42,11 +42,4 @@ interface ProviderInterface
      * @return $this
      */
     public function fetch(Consumer $consumer, array $config);
-
-    /**
-     * get consumer
-     *
-     * @return Consumer
-     */
-    public function getConsumer();
 }

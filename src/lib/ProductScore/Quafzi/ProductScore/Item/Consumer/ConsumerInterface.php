@@ -37,6 +37,16 @@ interface ConsumerInterface
     public function addItem($identifier, $score);
 
     /**
+     * get score
+     *
+     * @param string $itemIdentifier Item identifier (sku or id)
+     * @param string $default        Default Value
+     *
+     * @return string
+     */
+    public function getItem($identifier, $default=null);
+
+    /**
      * add temporary item data
      *
      * @param string $itemIdentifier Item identifier (sku or id)
@@ -59,4 +69,11 @@ interface ConsumerInterface
      * @return string
      */
     public function getItemData($identifier, $field, $default=null);
+
+    /**
+     * get result iterator
+     *
+     * @return Generator
+     */
+    public function getResultIterator();
 }
