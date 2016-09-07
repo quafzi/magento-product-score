@@ -19,7 +19,10 @@ class Quafzi_ProductScore_Model_Calculator
     protected function getCalculator()
     {
         if (!self::$calculator) {
-            Mage::helper('quafzi_productscore')->registerAutoloader();
+            Mage::helper('quafzi_productscore')
+                ->loadLibraries()
+                ->registerAutoloader()
+                ;
             self::$calculator = new \Quafzi\ProductScore\Calculator();
         }
         return self::$calculator;

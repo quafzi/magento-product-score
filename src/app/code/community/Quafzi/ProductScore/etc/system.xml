@@ -91,6 +91,133 @@
                         </redis_database>
                     </fields>
                 </system>
+                <googleAnalytics>
+                    <label>Google Analytics</label>
+                    <sort_order>30</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <enabled translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </enabled>
+                        <project_id translate="label">
+                            <label>Projekt ID</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>10</sort_order>
+                            <depends><enabled>1</enabled></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </project_id>
+                        <view_id translate="label">
+                            <label>View ID</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>20</sort_order>
+                            <depends><enabled>1</enabled></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </view_id>
+                        <private_key_id translate="label">
+                            <label>Private Key ID</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>30</sort_order>
+                            <depends><enabled>1</enabled></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </private_key_id>
+                        <private_key translate="label">
+                            <label>Private Key</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>40</sort_order>
+                            <depends><enabled>1</enabled></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </private_key>
+                        <client_email translate="label">
+                            <label>Client Email</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <depends><enabled>1</enabled></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </client_email>
+                        <client_id translate="label">
+                            <label>Client ID</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>60</sort_order>
+                            <depends><enabled>1</enabled></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </client_id>
+                        <auth_uri translate="label">
+                            <label>Authentification URI</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>70</sort_order>
+                            <depends><enabled>1</enabled></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </auth_uri>
+                        <token_uri translate="label">
+                            <label>Token URI</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>80</sort_order>
+                            <depends><enabled>1</enabled></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </token_uri>
+                        <auth_provider_x509_cert_url translate="label">
+                            <label>Auth Provider x509 Certificate URL</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>90</sort_order>
+                            <depends><enabled>1</enabled></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </auth_provider_x509_cert_url>
+                        <client_x509_cert_url translate="label">
+                            <label>Client x509 Certificate URL</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>100</sort_order>
+                            <depends><enabled>1</enabled></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </client_x509_cert_url>
+                        <weight_cartToDetail translate="label">
+                            <label>Weight of Cart to Detail</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-digits</validate>
+                            <sort_order>1000</sort_order>
+                            <depends><enabled>1</enabled></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </weight_cartToDetail>
+                    </fields>
+                </googleAnalytics>
             </groups>
         </quafzi_productscore>
     </sections>

@@ -14,6 +14,18 @@
  */
 class Quafzi_ProductScore_Helper_Data extends Mage_Core_Helper_Data
 {
+    public function loadLibraries()
+    {
+        // require bundled Google client to avoid version clashes
+        $baseDir = Mage::getBaseDir('lib') . '/ProductScore/';
+        $googleApiClientPath = 'phar://' . $baseDir . 'Provider/GoogleAnalytics/apiclient.phar';
+        require $googleApiClientPath;
+        set_include_path($googleApiClientPath . '/src/:' . get_include_path());
+        include($googleApiClientPath . '/vendor/autoload.php');
+
+        return $this;
+    }
+
     public function registerAutoloader()
     {
         spl_autoload_register(
@@ -31,5 +43,6 @@ class Quafzi_ProductScore_Helper_Data extends Mage_Core_Helper_Data
                 }
             }
         );
+        return $this;
     }
 }
