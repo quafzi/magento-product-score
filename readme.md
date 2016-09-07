@@ -92,6 +92,31 @@ Score is recalculated once a day, at 3:07 AM (see config.xml) by default. You ma
 
 After running it, you might need to rebuild your Flat Catalog.
 
+## Adding custom data providers
+
+To add custom data providers, you can use a custom Magento extension, that
+provides the configuration as well as the data provider class itself. Please
+make sure, that this class is in namespace Quafzi\ProductScore\Provider\Magento,
+although it will probably not be found by the autoloader, if it is not located
+in lib/ProductScore/Provider. To fix that issue, just add a default config like
+that to your ``config.xml``:
+
+    <config>
+        [...]
+        <default>
+            <quafzi_productscore>
+                <my_custom_provider>
+                    [...]
+                    <classPaths>
+                        <foo>
+                            app/code/local/MyCustom/ProductScore/lib/Provider/MyCustomProvider/Foo.php
+                        </foo>
+                    </classPaths>
+                </my_custom_provider>
+            </quafzi_productscore>
+        </default>
+    </config>
+
 ## Testing
 There are some tests for data consumers and providers. Run ``make test -B``.
 

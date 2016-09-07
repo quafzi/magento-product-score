@@ -53,12 +53,20 @@ class Quafzi_ProductScore_Model_Calculator
                 // skip system config
                 continue;
             }
+            if (isset($config['classPaths'])) {
+                foreach ($config['classPaths'] as $path) {
+                    require_once trim($path);
+                }
+            }
             if ($config['enabled'] === '0') {
                 continue;
             }
             $providerConfig = [];
             $weights = [];
             foreach ($config as $key => $value) {
+                if (in_array($key, ['classPaths', 'enabled'])) {
+                    continue;
+                }
                 if (0 === strpos($key, 'weight_')) {
                     $weights[ucfirst($provider) . '\\' . ucfirst(substr($key, strlen('weight_')))] = $value;
                 } else {
