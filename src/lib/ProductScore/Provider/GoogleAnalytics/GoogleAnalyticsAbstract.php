@@ -35,4 +35,62 @@ abstract class GoogleAnalyticsAbstract extends Provider
         $client->setScopes(['https://www.googleapis.com/auth/analytics.readonly']);
         return new \Google_Service_AnalyticsReporting($client);
     }
+
+    protected function fetchAnalyticsColumn($column, $config)
+    {
+        $analytics = $this->initializeAnalytics($config);
+
+        // Create the DateRange object.
+        $dateRange = new \Google_Service_AnalyticsReporting_DateRange();
+        $dateRange->setStartDate('7daysAgo');
+        $dateRange->setEndDate('today');
+
+        // Create the Metrics object.
+        $sessions = new \Google_Service_AnalyticsReporting_Metric();
+        $sessions->setExpression($column);
+
+        $dimension = new \Google_Service_AnalyticsReporting_Dimension();
+        $dimension->setName('ga:productSku');
+
+        $orderBy = new \Google_Service_AnalyticsReporting_OrderBy();
+        $orderBy->setFieldName($column);
+        $orderBy->setSortOrder('DESCENDING');
+
+        // Create the ReportRequest object.
+        $request = new \Google_Service_AnalyticsReporting_ReportRequest();
+        $request->setViewId($config['view_id']);
+        $request->setDateRanges($dateRange);
+        $request->setMetrics([$sessions]);
+        $request->setDimensions([$dimension]);
+        $request->setOrderBys([$orderBy]);
+
+        $body = new \Google_Service_AnalyticsReporting_GetReportsRequest();
+        $body->setReportRequests([$request]);
+
+        $reports = $analytics->reports->batchGet($body);
+        $this->handleResult($reports[0]);
+
+        return $this;
+    }
+
+    protected function handleResult($result)
+    {
+        $factor = null;
+        $rows = $result->getData()->getRows();
+        $productIds = array_flip($this->productIdentifiers);
+        for ( $rowIndex = 0; $rowIndex < count($rows); $rowIndex++) {
+            $row = $rows[ $rowIndex ];
+            $dimensions = $row->getDimensions();
+            $metrics = $row->getMetrics();
+            $sku = $dimensions[0];
+            $rate = $metrics[0]->getValues()[0];
+            if (!array_key_exists($sku, $productIds)) {
+                continue;
+            }
+            if (is_null($factor)) {
+                $factor = $this->maxScore/$rate;
+            }
+            $this->consumer->addItem($productIds[$sku], $rate*$factor);
+        }
+    }
 }

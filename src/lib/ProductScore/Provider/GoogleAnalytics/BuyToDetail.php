@@ -7,12 +7,12 @@ use Quafzi\ProductScore\Provider\FetchException;
 use Quafzi\ProductScore\Provider\GoogleAnalytics\GoogleAnalyticsAbstract as GoogleAnalytics;
 
 /**
- * Google Analytics Cart-to-Detail Product Score Provider
+ * Google Analytics Buy-to-Detail Product Score Provider
  *
  * @author Thomas Birke <magento@netextreme.de>
  */
 
-class CartToDetail extends GoogleAnalytics
+class BuyToDetail extends GoogleAnalytics
 {
     /**
      * fetch score information
@@ -25,7 +25,7 @@ class CartToDetail extends GoogleAnalytics
     public function fetch(Consumer $consumer, array $config)
     {
         $this->consumer = $consumer;
-        $this->fetchAnalyticsColumn('ga:cartToDetailRate', $config);
+        $this->fetchAnalyticsColumn('ga:buyToDetailRate', $config);
 
         return $this;
     }
