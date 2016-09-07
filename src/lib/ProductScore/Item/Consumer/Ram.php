@@ -72,6 +72,7 @@ class Ram implements ConsumerInterface
         if (!isset($this->data[$identifier])
             || !isset($this->data[$this->config['prefix']])
             || !isset($this->data[$this->config['prefix']][$identifier])
+            || !isset($this->data[$this->config['prefix']][$identifier][$field])
         ) {
             return $default;
         }
