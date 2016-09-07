@@ -19,7 +19,7 @@ interface ProviderInterface
      *
      * @return $this
      */
-    function setScoreRange($min, $max);
+    public function setScoreRange($min, $max);
 
     /**
      * set identifiers of products to fetch scoring data for
@@ -31,7 +31,7 @@ interface ProviderInterface
      *
      * @return $this
      */
-    function setProductIdentifiers(array $productIdentifiers);
+    public function setProductIdentifiers(array $productIdentifiers);
 
     /**
      * fetch score information
@@ -41,5 +41,12 @@ interface ProviderInterface
      *
      * @return $this
      */
-    function fetch(Consumer $consumer, array $config);
+    public function fetch(Consumer $consumer, array $config);
+
+    /**
+     * get consumer
+     *
+     * @return Consumer
+     */
+    public function getConsumer();
 }
