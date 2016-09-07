@@ -86,12 +86,14 @@ class CalculatorTest extends TestCase
     public function testRunWithoutProvidersAndProducts()
     {
         $calculator = new Calculator();
-        $consumer = $this->getMockBuilder('Quafzi\\ProductScore\\Item\\Consumer\\Foo\\Bar')
-            ->setMethods(['addItem'])
+        $consumer = $this->getMockBuilder('Quafzi\\ProductScore\\Item\\Consumer\\ConsumerInterface')
+            ->setMethods(['addItem', 'init', '__construct', 'addItemData', 'getItem', 'getItemData', 'getResultIterator'])
             ->getMock();
+        $consumer->expects($this->once())
+            ->method('init');
         $consumer->expects($this->never())
             ->method('addItem');
-        $calculator->setConsumer('Foo\\Bar');
+        $calculator->setConsumer($consumer);
         $calculator->run();
     }
 

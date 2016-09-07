@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Quafzi_ProductScore
+ *
+ * This file is part of the Quafzi_ProductScore extension.
+ * Please do not edit or add to this file if you wish to upgrade it to newer
+ * versions in the future.
+ *
+ * @category   Quafzi_ProductScore
+ * @package    Quafzi_ProductScore
+ * @author     Thomas Birke <magento@netextreme.de>
+ * @copyright  © 2016 by Thomas Birke <magento@netextreme.de>
+ * @license    OSL-3.0
+ */
+-->
+<config>
+    <modules>
+        <Quafzi_ProductScore>
+            <version>1.1.0</version>
+        </Quafzi_ProductScore>
+    </modules>
+    <global>
+        <helpers>
+            <quafzi_productscore>
+                <class>Quafzi_ProductScore_Helper</class>
+            </quafzi_productscore>
+        </helpers>
+        <models>
+            <quafzi_productscore>
+                <class>Quafzi_ProductScore_Model</class>
+            </quafzi_productscore>
+        </models>
+        <resources>
+            <quafzi_productscore_setup>
+                <setup>
+                    <module>Quafzi_ProductScore</module>
+                    <class>Mage_Catalog_Model_Resource_Eav_Mysql4_Setup</class>
+                </setup>
+            </quafzi_productscore_setup>
+        </resources>
+    </global>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Quafzi_ProductScore>
+                    <files>
+                        <default>Quafzi_ProductScore.csv</default>
+                    </files>
+                </Quafzi_ProductScore>
+            </modules>
+        </translate>
+    </adminhtml>
+    <crontab>
+        <jobs>
+            <fetchProductScores>
+                <schedule>
+                    <cron_expr>7 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>quafzi_productscore/cron::fetch</model>
+                </run>
+            </fetchProductScores>
+        </jobs>
+    </crontab>
+    <default>
+        <quafzi_productscore>
+            <system>
+                <redis_scheme>tcp</redis_scheme>
+                <redis_host>127.0.0.1</redis_host>
+                <redis_port>6379</redis_port>
+                <redis_database>productscore</redis_database>
+            </system>
+        </quafzi_productscore>
+    </default>
+</config>

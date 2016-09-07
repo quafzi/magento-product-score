@@ -7,7 +7,7 @@ namespace Quafzi\ProductScore\Item\Consumer;
  * @author Thomas Birke <magento@netextreme.de>
  */
 
-class FileConsumer implements ConsumerInterface
+class Files implements ConsumerInterface
 {
     protected $fileNames = [];
 
@@ -32,12 +32,17 @@ class FileConsumer implements ConsumerInterface
             $msg = 'You need to specify a "path" to the file to be written.';
             throw new InvalidConfigException($msg);
         }
+        $prefixRegex = '/^[a-z0-9_]*$/';
+        if (!isset($this->config['prefix']) || !($this->config['prefix'] || !preg_match($prefixRegex, $this->config['prefix']))) {
+            $msg = 'You need to specify a prefix per provider (must match ' . $prefixRegex . ').';
+            throw new InvalidConfigException($msg);
+        }
         if (isset($this->config['temporary_fields'])) {
             $this->fields = $this->config['temporary_fields'];
         }
         array_unshift($this->fields, 'score');
         foreach ($this->fields as $field) {
-            $this->fileNames[$field] = $this->config['path'] . '_' . $field;
+            $this->fileNames[$field] = $this->config['path'] . '_' . $this->config['prefix']. '_' . $field;
             @touch($this->fileNames[$field]);
             if (!is_writable($this->fileNames[$field])) {
                 $msg = 'File at "%s" is not writable.';
@@ -64,7 +69,7 @@ class FileConsumer implements ConsumerInterface
             ) {
                 return $this->fileHandles[$field];
             }
-            fclose($this->fileHandles[$field]);
+            $this->close($field);
         }
         $this->fileHandles[$field] = fopen($this->fileNames[$field], $mode);
         $this->accessModes[$field] = $mode;
@@ -101,7 +106,7 @@ class FileConsumer implements ConsumerInterface
     public function addItemData($identifier, $field, $value)
     {
         $this->checkFieldExists($field);
-        $file = $this->open($field, 'w');
+        $file = $this->open($field, 'a');
         fputcsv($file, [$identifier, $value]);
     }
 

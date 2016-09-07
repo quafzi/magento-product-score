@@ -1,5 +1,5 @@
 <?php
-use Quafzi\ProductScore\Item\Consumer\FileConsumer;
+use Quafzi\ProductScore\Item\Consumer\Files as FileConsumer;
 use Quafzi\ProductScore\Item\Consumer\InvalidConfigException;
 use PHPUnit\Framework\TestCase;
 
@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
  * @author Thomas Birke <magento@netextreme.de>
  */
 
-class FileConsumerTest extends TestCase
+class FilesTest extends TestCase
 {
     public function testInitWithoutConfig()
     {
@@ -21,12 +21,12 @@ class FileConsumerTest extends TestCase
 
     public function testInitWithNonWritableFile()
     {
-        $path = '/dev/full/foobar_';
+        $path = '/dev/full/foobar';
         $this->expectException(InvalidConfigException::class);
-        $this->expectExceptionMessage('File at "' . $path . '_score" is not writable.');
+        $this->expectExceptionMessage('File at "' . $path . '_sdf_score" is not writable.');
         try {
             $consumer = new FileConsumer();
-            $consumer->init(['path' => $path]);
+            $consumer->init(['path' => $path, 'prefix' => 'sdf']);
         } finally {
             @unlink($path);
         }
@@ -38,7 +38,7 @@ class FileConsumerTest extends TestCase
         try {
             $expectedScores = ['foo' => 3, 'bar' => 8, 'baz' => 5];
             $consumer = new FileConsumer();
-            $consumer->init(['path' => $path]);
+            $consumer->init(['path' => $path, 'prefix' => 'foobar']);
             $consumer->addItem('foo', $expectedScores['foo']);
             $consumer->addItem('bar', $expectedScores['bar']);
             $consumer->addItem('baz', $expectedScores['baz']);
@@ -64,12 +64,12 @@ class FileConsumerTest extends TestCase
         $path = tempnam(sys_get_temp_dir(), __CLASS__ . '_' . __FUNCTION__ . '_');
         try {
             $consumer = new FileConsumer();
-            $consumer->init(['path' => $path, 'temporary_fields' => ['bar', 'something']]);
+            $consumer->init(['path' => $path, 'temporary_fields' => ['bar', 'something'], 'prefix' => 'quz']);
             $consumer->addItemData('foo', 'bar', 3);
             $this->assertEquals(3, $consumer->getItemData('foo', 'bar'), 'Standard');
             $this->assertEquals('Standard', $consumer->getItemData('foo', 'something', 'Standard'));
-            $this->assertEquals("", file_get_contents($path . '_something'));
-            $this->assertEquals("foo,3\n", file_get_contents($path . '_bar'));
+            $this->assertEquals("", file_get_contents($path . '_quz_something'));
+            $this->assertEquals("foo,3\n", file_get_contents($path . '_quz_bar'));
         } catch (\Exception $e) {
             echo ' (File written: ' . $path . '*)';
             throw $e;

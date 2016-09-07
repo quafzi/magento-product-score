@@ -8,7 +8,7 @@ spl_autoload_register(
         $prefix = 'Quafzi\\ProductScore\\';
 
         // base directory for the namespace prefix
-        $base_dir = __DIR__ . '/../src/lib/ProductScore/Quafzi/ProductScore/';
+        $base_dir = __DIR__ . '/../src/lib/ProductScore/';
 
         // does the class use the namespace prefix?
         $len = strlen($prefix);

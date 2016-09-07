@@ -69,6 +69,7 @@ class Calculator
     public function setProductIdentifiers(array $productIdentifiers)
     {
         $this->productIdentifiers = $productIdentifiers;
+        return $this;
     }
 
     /**
@@ -105,18 +106,18 @@ class Calculator
         return $this->consumer;
     }
 
-    public function aggregateResults($providers)
+    public function aggregateResults($providerResults)
     {
-        $totalWeight = array_reduce($providers, function ($sum, $provider) {
+        $totalWeight = array_reduce($providerResults, function ($sum, $result) {
             return $sum + $result['weight'];
         }, 0);
         $this->consumer->init(['prefix' => 'final']);
-        foreach ($providers as $provider) {
-            $score = $this->minScore;
-            foreach (array_keys($this->productIdentifiers) as $productId) {
-                $score += $provider['consumer']->getItem($productId, 0) * $provider['weight'] / $totalWeight;
+        foreach (array_keys($this->productIdentifiers) as $productId) {
+            foreach ($providerResults as $result) {
+                $score = $this->minScore;
+                $score += $result['consumer']->getItem($productId, 0) * $result['weight'] / $totalWeight;
             }
-            $this->consumer->addItem($product, $score);
+            $this->consumer->addItem($productId, $score);
         }
     }
 
@@ -127,8 +128,9 @@ class Calculator
             throw new MissingConsumerException($msg);
         }
         $results = [];
-        foreach ($this->getProviders() as $providerData) {
+        foreach ($this->getProviders() as $prefix => $providerData) {
             $consumer = clone $this->consumer;
+            $consumer->init(['prefix' => 'provider' . $prefix]);
             $providerData['instance']
                 ->setScoreRange($this->minScore, $this->maxScore)
                 ->setProductIdentifiers($this->productIdentifiers)
@@ -138,5 +140,7 @@ class Calculator
                 'weight' => $providerData['weight']
             ];
         }
+        $this->aggregateResults($results);
+        return $this->consumer->getResultIterator();
     }
 }

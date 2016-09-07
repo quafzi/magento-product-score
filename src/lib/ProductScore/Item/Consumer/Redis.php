@@ -11,7 +11,7 @@ use Predis\Collection\Iterator;
  * @author Thomas Birke <magento@netextreme.de>
  */
 
-class RedisConsumer implements ConsumerInterface
+class Redis implements ConsumerInterface
 {
     protected $config;
     protected $client;
@@ -44,7 +44,7 @@ class RedisConsumer implements ConsumerInterface
         if (!isset($this->config['database']) || !($this->config['database'])) {
             $this->config['database'] = null;
         }
-        $this->client = new Predis\Client([
+        $this->client = new \Predis\Client([
             'scheme' => $this->config['scheme'],
             'host' => $this->config['host'],
             'port' => $this->config['port'],
@@ -79,7 +79,7 @@ class RedisConsumer implements ConsumerInterface
         $this->client->set($identifier, json_encode($value));
     }
 
-    protected function getIterator($field)
+    public function getResultIterator()
     {
         return new Iterator\HashKey($this->client, 'predis:hash');
     }

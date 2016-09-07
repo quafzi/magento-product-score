@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Quafzi_ProductScore
+ *
+ * This file is part of the Quafzi_ProductScore extension.
+ * Please do not edit or add to this file if you wish to upgrade it to newer
+ * versions in the future.
+ *
+ * @category   Quafzi_ProductScore
+ * @package    Quafzi_ProductScore
+ * @author     Thomas Birke <magento@netextreme.de>
+ * @copyright  ©2016 by Thomas Birke <magento@netextreme.de>
+ * @license    OSL-3.0
+ */
+-->
+<config>
+    <sections>
+        <quafzi_productscore translate="label" module="quafzi_productscore">
+            <label>Product Score</label>
+            <tab>catalog</tab>
+            <sort_order>15</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <system translate="label" module="quafzi_productscore">
+                    <label>System Settings</label>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <fields>
+                        <consumer translate="label">
+                            <label>Data storage</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>quafzi_productscore/system_config_source_dataConsumer</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </consumer>
+                        <files_path translate="label">
+                            <label>File path</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>20</sort_order>
+                            <depends><consumer>Files</consumer></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </files_path>
+                        <redis_scheme translate="label">
+                            <label>Redis connection scheme</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>20</sort_order>
+                            <depends><consumer>Redis</consumer></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </redis_scheme>
+                        <redis_host translate="label">
+                            <label>Redis host</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>30</sort_order>
+                            <depends><consumer>Redis</consumer></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </redis_host>
+                        <redis_port translate="label">
+                            <label>Redis port</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>required-entry</validate>
+                            <sort_order>40</sort_order>
+                            <depends><consumer>Redis</consumer></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </redis_port>
+                        <redis_database translate="label">
+                            <label>Redis database name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <depends><consumer>Redis</consumer></depends>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </redis_database>
+                    </fields>
+                </system>
+            </groups>
+        </quafzi_productscore>
+    </sections>
+</config>

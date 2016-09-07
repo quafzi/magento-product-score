@@ -1,1 +1,4 @@
 src/lib/* lib/
+src/app/code/community/Quafzi/* app/code/community/Quafzi/
+src/app/etc/modules/* app/etc/modules/
+src/app/locale/de_DE/* app/locale/de_DE/
