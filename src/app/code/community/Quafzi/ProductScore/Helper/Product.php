@@ -28,12 +28,28 @@ class Quafzi_ProductScore_Helper_Product extends Mage_Core_Helper_Abstract
     {
         $getItemScore = Mage::getModel('quafzi_productscore/calculator')->run();
         $product = Mage::getModel('catalog/product');
-        foreach ($getItemScore() as $item) {
-            $product = $product->setEntityId($item['product'])
-                ->setScoreCalculated($item['score'])
-                ->setScore($item['score']);
-            $product->getResource()->saveAttribute($product, 'score_calculated');
-            $product->getResource()->saveAttribute($product, 'score');
+        $productCollection = Mage::getModel('catalog/product')->getCollection()
+            ->addAttributeToSelect('score_calculated')
+            ->addAttributeToSelect('score_manual')
+            ->addAttributeToSelect('score')
+            ->load();
+        foreach ($getItemScore() as $index=>$item) {
+            $product = $productCollection->getItemById($item['product']);
+            if ($product->getScoreManual()) {
+                if (($product->getScoreCalculated() - $product->getScoreManual()) > 0.01) {
+                    $product->setScoreCalculated($item['score']);
+                    $product->getResource()->saveAttribute($product, 'score_calculated');
+                }
+                continue;
+            }
+            if (abs($product->getScore() - $item['score']) > 0.01) {
+                $product->setScore($item['score']);
+                $product->getResource()->saveAttribute($product, 'score');
+            }
+            if (abs($product->getScoreCalculated() - $item['score']) > 0.01) {
+                $product->setScoreCalculated($item['score']);
+                $product->getResource()->saveAttribute($product, 'score_calculated');
+            }
         }
         return $this;
     }
