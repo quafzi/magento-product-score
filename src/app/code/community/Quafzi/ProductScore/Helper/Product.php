@@ -34,17 +34,8 @@ class Quafzi_ProductScore_Helper_Product extends Mage_Core_Helper_Abstract
             ->load();
         foreach ($getItemScore() as $index=>$item) {
             $product = $productCollection->getItemById($item['product']);
-            if ($product->getScoreManual()) {
-                if (($product->getScoreCalculated() - $product->getScoreManual()) > 0.01) {
-                    $product->setScoreCalculated($item['score']);
-                    $product->getResource()->saveAttribute($product, 'score_calculated');
-                }
-                continue;
-            }
-            if (abs($product->getScore() - $item['score']) > 0.01) {
-                $product->setScore($item['score']);
-                $product->getResource()->saveAttribute($product, 'score');
-            }
+
+            // update calculated score, if it has changed
             if (abs($product->getScoreCalculated() - $item['score']) > 0.01) {
                 $product->setScoreCalculated($item['score']);
                 $product->getResource()->saveAttribute($product, 'score_calculated');
@@ -77,10 +68,13 @@ class Quafzi_ProductScore_Helper_Product extends Mage_Core_Helper_Abstract
             ->addAttributeToSelect('score')
             ->addAttributeToFilter([
                 ['attribute' => 'score_manual', 'notnull' => true],
-                ['attribute' => 'score_manual', 'gte' => 0]
-            ])->addAttributeToFilter('score_calculated', ['gte' => 0]);
+                ['attribute' => 'score_manual', 'gte' => 0],
+                ['attribute' => 'score_calculated', 'gte' => 0],
+                ['attribute' => 'score', 'gte' => 0]
+            ])
+            ;
         foreach ($this->_getCollectionItems($products) as $product) {
-            $product->setScore($product->getScoreManual());
+            $product->setScore($product->getScoreManual() ?: $product->getScoreCalculated());
             $product->getResource()->saveAttribute($product, 'score');
         }
         return $this;
