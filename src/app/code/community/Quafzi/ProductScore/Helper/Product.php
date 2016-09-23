@@ -66,12 +66,6 @@ class Quafzi_ProductScore_Helper_Product extends Mage_Core_Helper_Abstract
             ->addAttributeToSelect('score_calculated')
             ->addAttributeToSelect('score_manual')
             ->addAttributeToSelect('score')
-            ->addAttributeToFilter([
-                ['attribute' => 'score_manual', 'notnull' => true],
-                ['attribute' => 'score_manual', 'gte' => 0],
-                ['attribute' => 'score_calculated', 'gte' => 0],
-                ['attribute' => 'score', 'gte' => 0]
-            ])
             ;
         foreach ($this->_getCollectionItems($products) as $product) {
             $product->setScore($product->getScoreManual() ?: $product->getScoreCalculated());
